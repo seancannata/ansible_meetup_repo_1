@@ -1,0 +1,19 @@
+---
+- name: Provision VM in AWS
+  hosts: localhost
+  gather_facts: false
+  
+  tasks:
+  - name: Launch EC2 Instance
+    ec2:
+      region: "{{ region }}"
+      key_name: "{{ key_name }}"
+      group: "{{ security_group_name }}"
+      instance_type: "{{ instance_type }}"
+      image: "{{ ami_id }}"
+      wait: true
+      count: 1
+      network:
+        assign_public_ip: true
+        subnet_id: "{{ subnet_id }}"
+    register: ec2
