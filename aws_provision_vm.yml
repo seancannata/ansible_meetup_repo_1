@@ -5,15 +5,16 @@
   
   tasks:
   - name: Launch EC2 Instance
-    ec2:
-      region: "{{ region }}"
-      key_name: "{{ key_name }}"
-      group: "{{ security_group_name }}"
+    amazon.aws.ec2_instance:
+      name: "{{ vm_name }}"
+      region: "{{ aws_region }}"
+      vpc_subnet_id: "{{ subnet_id }}"
       instance_type: "{{ instance_type }}"
-      image: "{{ ami_id }}"
-      wait: true
-      count: 1
-      network:
-        assign_public_ip: true
-        subnet_id: "{{ subnet_id }}"
-    register: ec2
+      key_name: "{{ key_name }}"
+      security_group: "{{ security_group }}"
+      image_id:  "{{ image_id }}"
+      volumes:
+        - device_name: /dev/sda1
+          ebs:
+            volume_size: 30
+            delete_on_termination: true
